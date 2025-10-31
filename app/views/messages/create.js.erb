@@ -1,0 +1,10 @@
+const messagesContainer = document.getElementById("messages");
+if (messagesContainer) {
+  messagesContainer.querySelector(".ui.feed").insertAdjacentHTML('beforeend', '<%= j render partial: "messages/message", locals: { message: @message } %>');
+  messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+// Redirect sender after 1 second
+setTimeout(() => {
+  window.location.href = "<%= root_path %>";
+}, 1000); // 1-second delay to allow user to see message

@@ -1,0 +1,28 @@
+<%= link_to "Chatroom", root_path, class: "item" %>
+<a class="item">
+  Messages
+</a>
+
+<div class="right menu">
+    <div class="menu">
+      <% if logged_in? %>
+        <%= button_to "Logout", logout_path, method: :delete, class: "item" %>
+      <% else %>
+        <div class="ui simple dropdown item">
+  Account <i class="dropdown icon"></i>
+  <div class="menu">
+    <%= link_to "Log in", login_path, class: "item" %>
+    <%= link_to "Sign up", login_path, class: "item" %>
+  </div>
+</div>
+</div>
+      <% end %>
+    </div>
+  </div>
+
+  <% if !logged_in? %>
+    <div class="item">
+      <%= link_to "Log in", login_path, class: "ui primary button" %>
+    </div>
+  <% end %>
+</div>

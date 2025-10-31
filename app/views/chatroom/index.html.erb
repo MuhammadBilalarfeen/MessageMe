@@ -1,0 +1,83 @@
+<h4 class="ui center aligned medium icon header">
+  <i class="circular orange coffee icon"></i>
+  Say Something
+</h4>
+
+<div class="ui two column grid">
+  <!-- Chat messages column -->
+  <div class="twelve wide column">
+    <div class="ui fluid raised card chatbox">
+
+      <!-- Messages container -->
+      <div class="content" id="messages">
+  <div class="ui feed">
+    <%= render partial: "messages/message", collection: @messages %>
+  </div>
+</div>
+
+<div class="extra content">
+  <%= form_with(model: @message, url: messages_path, remote: true, data: { turbo: false }, class: "ui reply form", id: "new_message") do |f| %>
+  <div class="field">
+    <div class="ui fluid icon input">
+      <%= f.text_field :body, placeholder: "Enter a message" %>
+      <%= f.button type: "submit", class: "ui icon button" do %>
+        <i class="bordered inverted orange edit icon"></i>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+</div>
+
+    </div>
+  </div>
+
+  <!-- Sidebar column -->
+  <div class="four wide column">
+    <div class="ui fluid raised card chatbox">
+      <div class="content">
+        <div class="ui inverted vertical pointing menu">
+          <a class="item">Sidebar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JS snippet to handle message submission -->
+<script>
+document.addEventListener("turbo:load", () => {
+  const button = document.getElementById("send-btn");
+  const form = document.getElementById("new_message");
+
+  if (button && form) {
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      const bodyInput = document.getElementById("message_body");
+      if (!bodyInput.value.trim()) return; // prevent empty messages
+
+      const formData = new FormData();
+      formData.append("message[body]", bodyInput.value);
+
+      fetch(form.action, {
+        method: "POST",
+        headers: {
+          "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: formData
+      })
+      .then(response => {
+        if (response.ok) {
+          bodyInput.value = ""; // clear input after successful send
+        } else {
+          console.error("Message failed to send");
+        }
+      })
+      .catch(err => console.error(err));
+    });
+  }
+});
+</script>
+
+
